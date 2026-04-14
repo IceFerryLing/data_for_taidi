@@ -1,0 +1,13 @@
+﻿batch_id,stock_count,row_count,start_code,end_code,path
+0,100,24300,sh.600000,sh.600133,D:\desk\泰迪杯\C题\output\expanded\daily_kline_batches\daily_kline_batch_000.parquet
+1,100,24300,sh.600135,sh.600267,D:\desk\泰迪杯\C题\output\expanded\daily_kline_batches\daily_kline_batch_001.parquet
+2,100,24300,sh.600268,sh.600398,D:\desk\泰迪杯\C题\output\expanded\daily_kline_batches\daily_kline_batch_002.parquet
+3,100,24300,sh.600399,sh.600545,D:\desk\泰迪杯\C题\output\expanded\daily_kline_batches\daily_kline_batch_003.parquet
+4,100,24300,sh.600546,sh.600664,D:\desk\泰迪杯\C题\output\expanded\daily_kline_batches\daily_kline_batch_004.parquet
+5,100,24300,sh.600665,sh.600783,D:\desk\泰迪杯\C题\output\expanded\daily_kline_batches\daily_kline_batch_005.parquet
+6,100,24300,sh.600784,sh.600909,D:\desk\泰迪杯\C题\output\expanded\daily_kline_batches\daily_kline_batch_006.parquet
+7,100,23836,sh.600916,sh.601116,D:\desk\泰迪杯\C题\output\expanded\daily_kline_batches\daily_kline_batch_007.parquet
+8,100,24300,sh.601117,sh.601677,D:\desk\泰迪杯\C题\output\expanded\daily_kline_batches\daily_kline_batch_008.parquet
+9,100,24251,sh.601678,sh.603021,D:\desk\泰迪杯\C题\output\expanded\daily_kline_batches\daily_kline_batch_009.parquet
+10,100,24033,sh.603022,sh.603135,D:\desk\泰迪杯\C题\output\expanded\daily_kline_batches\daily_kline_batch_010.parquet
+11,100,16066,sh.603136,sh.603271,D:\desk\泰迪杯\C题\output\expanded\daily_kline_batches\daily_kline_batch_011.parquet
