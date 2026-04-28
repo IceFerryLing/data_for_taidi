@@ -795,7 +795,7 @@ w_i = \frac{e^{\text{score}_i - \max(\text{score})}}{\sum_j e^{\text{score}_j - 
 
 ## 20. 代码入口说明
 
-核心实现文件为 [pred_compact.py](/C:/Users/LENOVN/Desktop/data-competition/pred_compact.py)。
+核心实现文件为 [pred_compact.py](./pred_compact.py)。
 
 若需要运行，命令格式为：
 
