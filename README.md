@@ -45,9 +45,9 @@
 
 记映射函数为：
 
-$$
+```math
 T(e) = \operatorname{next\_decision\_tuesday}(t_e)
-$$
+```
 
 这样，每条“事件-股票”关系都会被归属到一个明确的周频决策截面。
 
@@ -62,9 +62,9 @@ $$
 
 于是单周目标收益率为：
 
-$$
+```math
 y_{i,t} = \frac{P^{\text{sell}}_{i,t} - P^{\text{buy}}_{i,t}}{P^{\text{buy}}_{i,t}}
-$$
+```
 
 其中：
 
@@ -73,15 +73,15 @@ $$
 
 为了减少极端行情对树模型的扰动，收益率被截断到：
 
-$$
+```math
 y_{i,t} \in [-0.5, 0.5]
-$$
+```
 
 同时还定义分类标签：
 
-$$
+```math
 z_{i,t} = \mathbf{1}(y_{i,t} > 0)
-$$
+```
 
 即：下一周是否上涨。
 
@@ -95,9 +95,9 @@ $$
 
 算法首先把 `event_company_map.csv` 与 `events.csv` 按 `event_id` 合并，得到“某事件影响某股票”的基础样本。每一行可以理解为一条边：
 
-$$
+```math
 e \rightarrow i
-$$
+```
 
 其中边上携带的信息包括：
 
@@ -113,15 +113,15 @@ $$
 
 先定义事件距决策周二的天数：
 
-$$
+```math
 \Delta d = \min(\max(T(e)-t_e, 1), 30)
-$$
+```
 
 再定义衰减系数：
 
-$$
+```math
 \text{decay} = \exp\left(-\ln(2)\cdot \frac{\Delta d}{7}\right)
-$$
+```
 
 其含义是：**每经过 7 天，事件影响力大约衰减一半**。  
 这是一种非常适合事件交易的权重设计，因为它符合“短期事件 alpha 快速衰减”的市场经验。
@@ -133,27 +133,27 @@ $$
 
 记：
 
-$$
+```math
 \text{direct} \in \{0,1\}
-$$
+```
 
 则直接关系调整因子为：
 
-$$
+```math
 1 + 0.5 \cdot \text{direct}
-$$
+```
 
 ### 4.4 事件强度与关联强度融合
 
 最终单条事件-股票边的基础权重定义为：
 
-$$
+```math
 w_{e,i}
 = \max(\text{relation\_strength}, 0.05)
 \cdot \left(1+\frac{\text{intensity\_score}}{5}\right)
 \cdot \text{decay}
 \cdot (1+0.5\cdot \text{direct})
-$$
+```
 
 这个公式是整个框架的关键之一。它把四个核心维度融合到同一个事件影响强度里：
 
@@ -174,9 +174,9 @@ $$
 
 算法根据 `event_name`、`relation_type`、`note` 中是否出现典型利多/利空关键词，构造事件方向：
 
-$$
+```math
 \text{sign}_{e,i} \in \{-1,0,1\}
-$$
+```
 
 其中：
 
@@ -186,13 +186,13 @@ $$
 
 并进一步衍生：
 
-$$
+```math
 \text{positive\_event} = \mathbf{1}(\text{sign}_{e,i} > 0)
-$$
+```
 
-$$
+```math
 \text{negative\_event} = \mathbf{1}(\text{sign}_{e,i} < 0)
-$$
+```
 
 这种做法的优点是：
 
@@ -212,23 +212,23 @@ $$
 
 ### 6.1 事件数量特征
 
-$$
+```math
 \text{event\_count}_{i,t} = |E_{i,t}|
-$$
+```
 
-$$
+```math
 \text{unique\_event\_count}_{i,t} = \text{去重后的事件数量}
-$$
+```
 
 并统计正向、负向事件数量：
 
-$$
+```math
 \text{positive\_event\_count}_{i,t} = \sum_{e\in E_{i,t}} \mathbf{1}(\text{sign}_{e,i}>0)
-$$
+```
 
-$$
+```math
 \text{negative\_event\_count}_{i,t} = \sum_{e\in E_{i,t}} \mathbf{1}(\text{sign}_{e,i}<0)
-$$
+```
 
 这些特征反映的是**某只股票在当前周的事件拥挤度与方向分布**。
 
@@ -236,17 +236,17 @@ $$
 
 对上一节定义的事件边权重 $w_{e,i}$，做如下聚合：
 
-$$
+```math
 \text{row\_weight\_sum}_{i,t} = \sum_{e\in E_{i,t}} w_{e,i}
-$$
+```
 
-$$
+```math
 \text{row\_weight\_max}_{i,t} = \max_{e\in E_{i,t}} w_{e,i}
-$$
+```
 
-$$
+```math
 \text{row\_weight\_mean}_{i,t} = \frac{1}{|E_{i,t}|}\sum_{e\in E_{i,t}} w_{e,i}
-$$
+```
 
 其数学含义分别对应：
 
@@ -258,25 +258,25 @@ $$
 
 分别对 `relation_strength` 和 `intensity_score` 取均值、最大值：
 
-$$
+```math
 \text{relation\_strength\_mean},\ \text{relation\_strength\_max}
-$$
+```
 
-$$
+```math
 \text{intensity\_score\_mean},\ \text{intensity\_score\_max}
-$$
+```
 
 它们用于衡量“事件是否真的强相关”和“事件本身是否足够强”。
 
 ### 6.4 事件方向统计
 
-$$
+```math
 \text{event\_sign\_sum}_{i,t} = \sum_{e\in E_{i,t}} \text{sign}_{e,i}
-$$
+```
 
-$$
+```math
 \text{event\_sign\_mean}_{i,t} = \frac{1}{|E_{i,t}|}\sum_{e\in E_{i,t}} \text{sign}_{e,i}
-$$
+```
 
 该组特征反映了**事件簇整体偏利多还是偏利空**。
 
@@ -284,13 +284,13 @@ $$
 
 对事件到决策日的时间差做聚合：
 
-$$
+```math
 \text{decision\_gap\_days\_min},\ \text{decision\_gap\_days\_mean}
-$$
+```
 
-$$
+```math
 \text{decay\_to\_decision\_max},\ \text{decay\_to\_decision\_mean}
-$$
+```
 
 这组变量让模型知道：
 
@@ -299,13 +299,13 @@ $$
 
 ### 6.6 关系层级特征
 
-$$
+```math
 \text{direct\_event\_share}_{i,t} = \frac{\sum \mathbf{1}(\text{direct}=1)}{|E_{i,t}|}
-$$
+```
 
-$$
+```math
 \text{indirect\_event\_share}_{i,t} = \frac{\sum \mathbf{1}(\text{indirect}=1)}{|E_{i,t}|}
-$$
+```
 
 并统计其数量。  
 其目的是让模型区分“核心受益标的”和“外围映射标的”。
@@ -329,9 +329,9 @@ $$
 
 然后按事件权重求和，例如：
 
-$$
+```math
 \text{driver\_w\_macro}(i,t) = \sum_{e\in E_{i,t},\ \text{driver}(e)=\text{macro}} w_{e,i}
-$$
+```
 
 这比简单统计个数更强，因为它同时纳入了强度、时效和直接性。
 
@@ -346,9 +346,9 @@ $$
 
 同样定义加权和：
 
-$$
+```math
 \text{impact\_w\_pulse},\ \text{impact\_w\_mid},\ \text{impact\_w\_long}
-$$
+```
 
 这让模型能够识别：
 
@@ -366,9 +366,9 @@ $$
 
 并构造：
 
-$$
+```math
 \text{predict\_w\_sudden},\ \text{predict\_w\_pre}
-$$
+```
 
 这部分反映的是**事件是否容易被市场提前定价**。  
 一般来说，突发事件更可能带来超额收益，而预披露事件更容易被提前消化。
@@ -383,13 +383,13 @@ $$
 
 定义 5 日和 20 日收盘动量：
 
-$$
+```math
 \text{close\_mom\_5} = \frac{\text{Close}_t}{\text{Close}_{t-5}} - 1
-$$
+```
 
-$$
+```math
 \text{close\_mom\_20} = \frac{\text{Close}_t}{\text{Close}_{t-20}} - 1
-$$
+```
 
 其含义是：
 
@@ -400,19 +400,19 @@ $$
 
 先定义日收益率：
 
-$$
+```math
 r_t = \frac{\text{Close}_t}{\text{Close}_{t-1}} - 1
-$$
+```
 
 再计算滚动标准差：
 
-$$
+```math
 \text{volatility\_5} = \operatorname{std}(r_{t-4:t})
-$$
+```
 
-$$
+```math
 \text{volatility\_20} = \operatorname{std}(r_{t-19:t})
-$$
+```
 
 波动率本质上衡量的是不确定性。  
 同样的事件强度，在高波动股票和低波动股票上的收益兑现效率可能完全不同。
@@ -421,22 +421,22 @@ $$
 
 代码构造了：
 
-$$
+```math
 \text{amount\_ratio}_{5,20} = \frac{MA_5(\text{amount})}{MA_{20}(\text{amount})}
-$$
+```
 
-$$
+```math
 \text{volume\_ratio}_{5,20} = \frac{MA_5(\text{volume})}{MA_{20}(\text{volume})}
-$$
+```
 
 它们用于判断事件发生前后资金是否已经开始异动。  
 若该比值大于 1，意味着近期交易活跃度高于中期均值，可能说明事件正在被资金关注。
 
 ### 8.4 最近一日涨跌幅
 
-$$
+```math
 \text{last\_pctchg}
-$$
+```
 
 这是一个很轻量但有效的短期状态变量，用于表示事件周前最后一个交易日的价格反馈。
 
@@ -448,9 +448,9 @@ $$
 
 如果事件所属行业与股票行业一致，则：
 
-$$
+```math
 \text{industry\_match} = 1
-$$
+```
 
 否则为 0。
 
@@ -459,9 +459,9 @@ $$
 
 ### 9.2 上市时长
 
-$$
+```math
 \text{listed\_days} = \text{decision\_tuesday} - \text{ipo\_date}
-$$
+```
 
 并构造：
 
@@ -489,13 +489,13 @@ $$
 
 ### 10.1 个股上周收益
 
-$$
+```math
 \text{prev\_week\_return}_{i,t} = y_{i,t-1}
-$$
+```
 
-$$
+```math
 \text{prev\_week\_up}_{i,t} = \mathbf{1}(y_{i,t-1} > 0)
-$$
+```
 
 这表示该股票此前是否已经开始被资金抢跑。
 
@@ -503,17 +503,17 @@ $$
 
 对所有股票的上周收益做截面聚合：
 
-$$
+```math
 \text{market\_prev\_week\_mean}_t = \frac{1}{N_t}\sum_i y_{i,t-1}
-$$
+```
 
-$$
+```math
 \text{market\_prev\_week\_std}_t = \operatorname{std}_i(y_{i,t-1})
-$$
+```
 
-$$
+```math
 \text{market\_prev\_week\_up\_ratio}_t = \frac{1}{N_t}\sum_i \mathbf{1}(y_{i,t-1} > 0)
-$$
+```
 
 这组变量是一个轻量的市场 regime 代理：
 
@@ -544,9 +544,9 @@ $$
 
 回归器使用 `XGBoost Regressor`，目标是预测下一周收益率：
 
-$$
+```math
 \hat{y}_{i,t} = f_{\text{reg}}(x_{i,t})
-$$
+```
 
 其中 $x_{i,t}$ 为前文构造的压缩特征向量。
 
@@ -554,9 +554,9 @@ $$
 
 分类器使用 `XGBoost Classifier`，目标是预测下一周上涨概率：
 
-$$
+```math
 \hat{p}_{i,t} = P(y_{i,t} > 0 \mid x_{i,t}) = f_{\text{cls}}(x_{i,t})
-$$
+```
 
 ### 12.3 为什么双模型比单模型更合理
 
@@ -624,9 +624,9 @@ $$
 
 其中最贴近最终交易目标的是：
 
-$$
+```math
 \text{Top3 Mean Return}
-$$
+```
 
 因为比赛最终输出并不是全市场收益预测表，而是有限数量标的的资金分配结果。
 
@@ -641,23 +641,23 @@ $$
 
 代码再定义综合得分 `selection_score`：
 
-$$
+```math
 \text{score}_{i,t}
 = 0.58 \cdot \hat{p}_{i,t}
 + 0.22 \cdot \frac{\hat{y}_{i,t}}{\text{scale}_t}
 + 0.12 \cdot \text{weight\_norm}_{i,t}
 + 0.08 \cdot \text{prev\_week\_return}_{i,t}
-$$
+```
 
 其中：
 
-$$
+```math
 \text{scale}_t = \operatorname{median}(|\hat{y}_{i,t}|) + 10^{-6}
-$$
+```
 
-$$
+```math
 \text{weight\_norm}_{i,t} = \frac{\text{row\_weight\_sum}_{i,t}}{\max_j \text{row\_weight\_sum}_{j,t} + 10^{-6}}
-$$
+```
 
 这个综合得分的金融解释是：
 
@@ -676,9 +676,9 @@ $$
 
 先筛选：
 
-$$
+```math
 \hat{p}_{i,t} \ge 0.5
-$$
+```
 
 即至少上涨概率不低于 50%。  
 如果筛完为空，则回退为直接按综合得分取前 `TopK`，这里默认 `K=3`。
@@ -687,9 +687,9 @@ $$
 
 对入选股票的综合分做 softmax 分配：
 
-$$
+```math
 w_i = \frac{e^{\text{score}_i - \max(\text{score})}}{\sum_j e^{\text{score}_j - \max(\text{score})}}
-$$
+```
 
 其优点是：
 
