@@ -1,0 +1,14 @@
+.venv/
+.vscode/
+output/
+
+*.zip
+
+debug_*.csv
+result*.xlsx
+
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
