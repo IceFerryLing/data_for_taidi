@@ -489,9 +489,9 @@ r_t = \frac{\text{Close}_t}{\text{Close}_{t-1}} - 1
 
 ### 10.1 个股上周收益
 
-```math
+$$
 \text{prev\_week\_return}_{i,t} = y_{i,t-1}
-```
+$$
 
 ```math
 \text{prev\_week\_up}_{i,t} = \mathbf{1}(y_{i,t-1} > 0)
