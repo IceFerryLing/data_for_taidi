@@ -256,7 +256,7 @@ w_{e,i}
 
 ### 6.3 关联强度与事件强度统计
 
-分别对 elation_strength 和 \intensity_score 取均值、最大值：
+分别对 `relation_strength` 和 `intensity_score` 取均值、最大值：
 
 ```math
 \text{relation\_strength\_mean},\ \text{relation\_strength\_max}
